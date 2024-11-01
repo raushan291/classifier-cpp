@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  web:
+    build: ../
+    container_name: flask_app_clf
+    ports:
+      - "5000:5000"

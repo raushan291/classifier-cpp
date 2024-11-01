@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Executable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 5px 10px;
+        }
+        #output {
+            white-space: pre-wrap; /* Preserve whitespace formatting */
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script>
+        function submitForm(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(document.getElementById('inputForm'));
+            
+            fetch('/run', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the output or error
+                document.getElementById('output').textContent = data.output || data.error;
+            })
+            .catch(error => {
+                document.getElementById('output').textContent = `Error: ${error}`;
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Run Executable with Input</h1>
+    <form id="inputForm" onsubmit="submitForm(event)">
+        <label for="image">Select Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+        <br><br>
+
+        <label for="model">Select Model (optional):</label>
+        <input type="file" id="model" name="model" accept=".onnx">
+        <br><br>
+        <button type="submit">Run Inference</button>
+    </form>
+    
+    <label>Uploaded Image:</label>
+    <img id="imagePreview" src="" alt="Selected Image" style="display: none; max-width: 300px;">
+    <br><br>
+    
+    <label>Model outputs:</label>
+    <div id="output"></div>
+
+    <script>
+        // Preview the selected image
+        function previewImage(event) {
+            const image = document.getElementById('image').files[0];
+            const imagePreview = document.getElementById('imagePreview');
+            
+            if (image) {
+                imagePreview.src = URL.createObjectURL(image);
+                imagePreview.style.display = 'block';
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
