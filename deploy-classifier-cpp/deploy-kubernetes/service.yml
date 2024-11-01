@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpp-classifier-flask-service
+spec:
+  selector:
+    app: cpp-classifier-flask-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.240

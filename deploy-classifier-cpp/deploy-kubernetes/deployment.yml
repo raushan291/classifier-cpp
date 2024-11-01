@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpp-classifier-flask-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cpp-classifier-flask-app
+  template:
+    metadata:
+      labels:
+        app: cpp-classifier-flask-app
+    spec:
+      containers:
+      - name: cpp-classifier-flask-app
+        image: raushan0291/cpp-classifier-flask:latest
+        ports:
+        - containerPort: 5000
