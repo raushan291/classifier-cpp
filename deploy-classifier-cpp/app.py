@@ -15,7 +15,7 @@ def run_executable():
     # Check if files were uploaded
     image_file = request.files.get('image')
     model_file = request.files.get('model')
-    runtime = request.form.get('runtime', 'opencv')  # Default to 'cpu' if not selected
+    runtime = request.form.get('runtime', 'opencv')  # Default to 'opencv' if not selected
 
     if runtime == 'opencv':
         exe = './Infer_OpenCV.exe'
