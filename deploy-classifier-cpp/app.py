@@ -15,6 +15,12 @@ def run_executable():
     # Check if files were uploaded
     image_file = request.files.get('image')
     model_file = request.files.get('model')
+    runtime = request.form.get('runtime', 'opencv')  # Default to 'cpu' if not selected
+
+    if runtime == 'opencv':
+        exe = './Infer_OpenCV.exe'
+    if runtime == 'ort':
+        exe = './Infer_ORT.exe'
 
     if not image_file:
         return jsonify({'error': 'Image file is required'}), 400
@@ -32,7 +38,7 @@ def run_executable():
 
     try:
         # Run the executable with the input arguments
-        result = subprocess.run(['./Infer_OpenCV.exe', model_path, image_path], capture_output=True, text=True, timeout=10)
+        result = subprocess.run([exe, model_path, image_path], capture_output=True, text=True, timeout=10)
 
         # Check if the command executed successfully
         if result.returncode == 0:

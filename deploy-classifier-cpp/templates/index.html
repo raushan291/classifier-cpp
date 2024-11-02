@@ -60,6 +60,14 @@
         <label for="model">Select Model (optional):</label>
         <input type="file" id="model" name="model" accept=".onnx">
         <br><br>
+
+        <label for="runtime">Select Runtime:</label>
+        <select id="runtime" name="runtime">
+            <option value="opencv" selected>Opencv</option>
+            <option value="ort">Onnx Run Time</option>
+        </select>
+        <br><br>
+
         <button type="submit">Run Inference</button>
     </form>
     

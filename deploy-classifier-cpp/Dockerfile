@@ -13,6 +13,7 @@ WORKDIR /app
 
 # Copy the precompiled executable and shared library (if any) into the container
 COPY Infer_OpenCV.exe /app/
+COPY Infer_ORT.exe /app/
 COPY lib /app/lib/
 
 # Copy necessary input/output/models directory
