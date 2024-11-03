@@ -53,44 +53,82 @@
 <body>
     <h1>Run Executable with Input</h1>
     <form id="inputForm" onsubmit="submitForm(event)">
-        <label for="image">Select Image:</label>
+        <label for="image">Select Image: <span style="color: red;">*</span></label>
         <input type="file" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
         <br><br>
 
-        <label for="model">Select Model (optional):</label>
-        <input type="file" id="model" name="model" accept=".onnx">
-        <br><br>
-
         <label for="runtime">Select Runtime:</label>
-        <select id="runtime" name="runtime">
+        <select id="runtime" name="runtime" onchange="toggleModelInputs()">
             <option value="opencv" selected>Opencv</option>
             <option value="ort">Onnx Run Time</option>
+            <option value="openvino">OpenVINO Run Time</option>
         </select>
+        <br><br>
+
+        <!-- Single model file input for non-OpenVINO runtimes -->
+        <div id="nonOpenvinoModelInput">
+            <label for="model">Select Model:</label>
+            <input type="file" id="model" name="model" accept=".onnx,.pt">
+        </div>
+
+        <!-- XML and BIN file inputs for OpenVINO -->
+        <div id="openvinoModelInputs" style="display: none;">
+            <label for="modelXml">Select Model XML:</label>
+            <input type="file" id="modelXml" name="modelXml" accept=".xml">
+            <br><br>
+
+            <label for="modelBin">Select Model BIN:</label>
+            <input type="file" id="modelBin" name="modelBin" accept=".bin">
+        </div>
         <br><br>
 
         <button type="submit">Run Inference</button>
     </form>
-    
-    <label>Uploaded Image:</label>
-    <img id="imagePreview" src="" alt="Selected Image" style="display: none; max-width: 300px;">
-    <br><br>
+
+    <div id="uploadedImageContainer" style="display: none;">
+        <label>Uploaded Image:</label>
+        <img id="imagePreview" src="" alt="Selected Image" style="max-width: 300px;">
+        <br><br>
+    </div>
     
     <label>Model outputs:</label>
     <div id="output"></div>
 
     <script>
+        // Function to toggle model input fields based on selected runtime
+        function toggleModelInputs() {
+            const runtime = document.getElementById('runtime').value;
+            const openvinoInputs = document.getElementById('openvinoModelInputs');
+            const nonOpenvinoInput = document.getElementById('nonOpenvinoModelInput');
+
+            if (runtime === 'openvino') {
+                openvinoInputs.style.display = 'block';
+                nonOpenvinoInput.style.display = 'none';
+            } else {
+                openvinoInputs.style.display = 'none';
+                nonOpenvinoInput.style.display = 'block';
+            }
+        }
+
         // Preview the selected image
         function previewImage(event) {
             const image = document.getElementById('image').files[0];
             const imagePreview = document.getElementById('imagePreview');
+            const uploadedImageContainer = document.getElementById('uploadedImageContainer');
             
             if (image) {
                 imagePreview.src = URL.createObjectURL(image);
                 imagePreview.style.display = 'block';
+                uploadedImageContainer.style.display = 'block';
             } else {
                 imagePreview.style.display = 'none';
+                uploadedImageContainer.style.display = 'none';
             }
         }
+
+        // Run the toggle function initially to set the correct display based on default runtime selection
+        toggleModelInputs();
+
     </script>
 </body>
 </html>

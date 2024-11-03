@@ -14,6 +14,7 @@ WORKDIR /app
 # Copy the precompiled executable and shared library (if any) into the container
 COPY Infer_OpenCV.exe /app/
 COPY Infer_ORT.exe /app/
+COPY Infer_OpenVINO.exe /app/
 COPY lib /app/lib/
 
 # Copy necessary input/output/models directory
@@ -31,10 +32,10 @@ ENV LD_LIBRARY_PATH=/app/lib/
 
 # Install required packages
 RUN pip install Flask
-RUN pip install gevent 
+RUN pip install gevent
 
 # Expose port 5000 for the Flask application
-EXPOSE 5000 5000
+EXPOSE 5000
 
 # Run the Flask application
 CMD ["python", "app.py"]
